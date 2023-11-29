@@ -6,7 +6,7 @@ namespace Aplicacao.Persistencia;
 public class DbInitializer
 {
     // Adicionar dados base em banco de dados
-    private static void SeedData(AppDbContext context)
+    public static async Task SeedData(AppDbContext context)
     {
         context.Database.Migrate();
 
@@ -34,8 +34,8 @@ public class DbInitializer
                     Preco = 3000
                 },
             };
-            context.Produtos.AddRange(produtos);
-            context.SaveChanges();
+            await context.Produtos.AddRangeAsync(produtos);
+            await context.SaveChangesAsync();
         }
     }
 }
