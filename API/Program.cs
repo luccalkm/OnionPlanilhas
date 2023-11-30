@@ -1,13 +1,18 @@
+using API.Servicos;
 using Aplicacao.Persistencia;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Registrar provedor de codificação do Windows
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+// Adicionar Serviços
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ILeitorPlanilha, LeitorPlanilha>();
 
 // Adicionar conexão com o banco de dados conforme banco de dados utilizado
 builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -19,6 +24,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

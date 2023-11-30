@@ -1,12 +1,12 @@
 ﻿namespace API.DTOs;
 
-// Recebimento de dados da planilha será alocado através da criação de um objeto PlanilhaDTO
-// Assim a realocação de cada dado respectivo de cada objeto será facilitada
+// Recebimento de dados da planilha será alocado através da criação da classe PlanilhaDTO
+// Assim, a realocação de cada dado respectivo de cada objeto será facilitada
 //
 // Exemplo:
-// NumeroPedido e Data --> Pedido
-// NumeroDocumento, RazaoSocial, CEP ---> Cliente
-// Produto --> Produto
+// NumeroPedido e Data                 ---> Pedido
+// NumeroDocumento, RazaoSocial, CEP   ---> Cliente
+// Produto                             ---> Produto
 //
 public class PlanilhaDTO
 {
