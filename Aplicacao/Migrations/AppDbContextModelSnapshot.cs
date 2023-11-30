@@ -30,12 +30,7 @@ namespace Aplicacao.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RegiaoId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("NumeroDocumento");
-
-                    b.HasIndex("RegiaoId");
 
                     b.ToTable("Clientes");
                 });
@@ -97,24 +92,6 @@ namespace Aplicacao.Migrations
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("ProdutoPedidos");
-                });
-
-            modelBuilder.Entity("Dominio.Regiao", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("PercentualFrete")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Regiao");
                 });
 
             modelBuilder.Entity("Dominio.Cliente", b =>

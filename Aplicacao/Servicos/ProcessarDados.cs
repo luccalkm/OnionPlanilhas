@@ -17,7 +17,7 @@ public class ProcessarDados
         _mapper = mapper;
     }
 
-    public async Task<ClienteDTO> CadastrarCliente(PlanilhaDTO planilhaDTO)
+    public async Task<Cliente> CadastrarCliente(PlanilhaDTO planilhaDTO)
     {
         // Verificar se cliente existe
         var clienteExistente = await _context.Clientes
@@ -30,11 +30,11 @@ public class ProcessarDados
             var novoCliente = _mapper.Map<Cliente>(planilhaDTO);
             _context.Clientes.Add(novoCliente);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ClienteDTO>(novoCliente);
+            clienteExistente = novoCliente;
         }
 
         // Se o cliente já existe, retorna o DTO do cliente existente
-        return _mapper.Map<ClienteDTO>(clienteExistente);
+        return _mapper.Map<Cliente>(clienteExistente);
     }
 
     public async Task<Pedido> CadastrarPedido(PlanilhaDTO planilhaDTO)

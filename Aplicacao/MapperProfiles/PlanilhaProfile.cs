@@ -21,9 +21,5 @@ public class PlanilhaProfile : Profile
             // Registrar FK Cliente do Pedido
             .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.NumeroDocumento));
 
-        // Mapeamento de campos de PlanilhaDTO 
-        CreateMap<PlanilhaDTO, ProdutoDTO>()
-            .ForMember(destino => destino.Nome, opt => opt.MapFrom(src => src.Produto));
-
     }
 }

@@ -49,6 +49,7 @@ try
 {
     // Executar migration
     var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
 
     // Inicializar dados padrões no banco de dados
