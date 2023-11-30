@@ -1,6 +1,6 @@
-﻿using API.DTOs;
+﻿using Aplicacao.DTOs;
 
-namespace API.Servicos;
+namespace API.Servicos.ProcessarArquivos;
 
 public interface ILeitorPlanilha
 {

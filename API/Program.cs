@@ -1,7 +1,9 @@
-using API.Servicos;
 using Aplicacao.Persistencia;
+using API.Servicos.ProcessarArquivos;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using API.MapperProfiles;
+using Aplicacao.Servicos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,12 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(PlanilhaProfile));
+
 builder.Services.AddScoped<ILeitorPlanilha, LeitorPlanilha>();
+builder.Services.AddScoped<ProcessarDados>();
 
 // Adicionar conexão com o banco de dados conforme banco de dados utilizado
 builder.Services.AddDbContext<AppDbContext>(opt =>

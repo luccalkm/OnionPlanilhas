@@ -1,4 +1,4 @@
-﻿namespace API.DTOs;
+﻿namespace Aplicacao.DTOs;
 
 // Recebimento de dados da planilha será alocado através da criação da classe PlanilhaDTO
 // Assim, a realocação de cada dado respectivo de cada objeto será facilitada

@@ -1,24 +1,17 @@
-﻿using API.DTOs;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Logging;
+﻿using Aplicacao.DTOs;
 using OfficeOpenXml;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace API.Servicos;
+namespace API.Servicos.ProcessarArquivos;
 
 public class LeitorPlanilha : ILeitorPlanilha
 {
-    private readonly ILogger<LeitorPlanilha> _logger;
-    public LeitorPlanilha(ILogger<LeitorPlanilha> logger)
-    {
-        _logger = logger;
-    }
-    public async Task <IEnumerable<PlanilhaDTO>> LerPedidos(IFormFile planilha)
+
+    public async Task<IEnumerable<PlanilhaDTO>> LerPedidos(IFormFile planilha)
     {
         // Checa se a planilha é nula caso algum erro aconteça no código do controlador
-        if (planilha is null) return null;
+        if (planilha is null) throw new Exception("O arquivo recebido possui valor nulo");
 
         // Lista para registrar os pedidos
         var listaPedidos = new List<PlanilhaDTO>();
@@ -34,46 +27,50 @@ public class LeitorPlanilha : ILeitorPlanilha
 
         for (int row = 2; row <= totalLinhas; row++)
         {
+            // Verificar se chave primária de client é nula
+            var numeroDocumento = worksheet.Cells[row, 1].Value;
+
+            // Evitar registros onde registro de cliente está incompleto ou linha vazia
+            if (numeroDocumento is null) continue;
+
             var itemPlanilha = new PlanilhaDTO
             {
-                NumeroDocumento = RemoverCaracteresEspeciais(worksheet.Cells[row, 1].Value.ToString()!.Trim()),
+                NumeroDocumento = RemoverCaracteresEspeciais(numeroDocumento.ToString()!.Trim()),
                 RazaoSocial = worksheet.Cells[row, 2].Value.ToString()!.Trim(),
-                CEP = worksheet.Cells[row, 3].Value.ToString()!.Trim(),
+                CEP = RemoverCaracteresEspeciais(worksheet.Cells[row, 3].Value.ToString()!.Trim()),
                 Produto = worksheet.Cells[row, 4].Value.ToString()!.Trim(),
                 NumeroPedido = int.Parse(worksheet.Cells[row, 5].Value.ToString()!.Trim()),
                 Data = ConverterDateTimeEmDateOnly(worksheet.Cells[row, 6].Value.ToString()!.Trim()),
             };
 
-            ;
             listaPedidos.Add(itemPlanilha);
         }
 
         return listaPedidos;
     }
 
-    private String RemoverCaracteresEspeciais(string texto)
+    // Processamento de CPF/CNPJ necessário em regra de negócio de cadastrar somente dígitos
+    private string RemoverCaracteresEspeciais(string texto)
     {
         if (string.IsNullOrWhiteSpace(texto))
         {
             throw new ArgumentNullException("O texto não pode ser nulo ou vazio.", nameof(texto));
         }
 
-        // Um Regex para filtar o campo de identificação do cliente, sendo CPF ou CNPJ, obtendo apenas os digitos [0-9]
         var regraObterDigitos = new Regex(@"[^\d]");
         return regraObterDigitos.Replace(texto, "");
     }
 
-    // Na planilha o formato da  data solicitado é "dd/MM/yyyy"
-    // Como estava sendo lido "DateTime", foi necessário converter para "DateOnly"
+    // O formato da data fornecido é "dd/MM/yyyy", processamento necessário para manter o formato.
     private DateOnly ConverterDateTimeEmDateOnly(string stringData)
     {
-        if(string.IsNullOrWhiteSpace(stringData))
+        if (string.IsNullOrWhiteSpace(stringData))
         {
             throw new ArgumentNullException("A data não pode ser nula ou vazia.", nameof(stringData));
         }
 
         var formatoData = "dd/MM/yyyy HH:mm:ss";
-        if(DateTime.TryParseExact(stringData, formatoData, CultureInfo.InvariantCulture, DateTimeStyles.None, out var data))
+        if (DateTime.TryParseExact(stringData, formatoData, CultureInfo.InvariantCulture, DateTimeStyles.None, out var data))
         {
             return DateOnly.FromDateTime(data);
         }

@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.14" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dominio\Dominio.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NovaPasta\" />
   </ItemGroup>
 
 </Project>
