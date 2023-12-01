@@ -1,11 +1,15 @@
-﻿using Aplicacao.DTOs;
+﻿using API.Servicos.GestaoPlanilha;
+using Aplicacao.DTOs;
+using Aplicacao.Servicos;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace API.Servicos.ProcessarArquivos;
 
-public class LeitorPlanilha : ILeitorPlanilha
+public class GestaoPlanilhaService : IGestaoPlanilhaService
 {
 
     public async Task<IEnumerable<PlanilhaDTO>> LerPedidos(IFormFile planilha)
@@ -49,7 +53,23 @@ public class LeitorPlanilha : ILeitorPlanilha
         return listaPedidos;
     }
 
-    // Processamento de CPF/CNPJ necessário em regra de negócio de cadastrar somente dígitos
+    public async Task<ResultadoProcessamento> ProcessarPlanilha(IEnumerable<PlanilhaDTO> listaPedidos, ProcessarDados processamento)
+    {
+        // Checar se arquivo existe e possui conteúdo (garantir)
+        if (listaPedidos is null || !listaPedidos.Any())
+        {
+            return new ResultadoProcessamento { Successo = false, Mensagem = "A planilha não possui dados." };
+        }
+
+        foreach (var pedido in listaPedidos)
+        {
+            await processamento.CadastrarCliente(pedido);
+            await processamento.CadastrarProdutoPedido(pedido);
+        }
+
+        return new ResultadoProcessamento { Successo = true, Mensagem = "Planilha processada com sucesso." };
+    }
+
     private string RemoverCaracteresEspeciais(string texto)
     {
         if (string.IsNullOrWhiteSpace(texto))
@@ -61,7 +81,6 @@ public class LeitorPlanilha : ILeitorPlanilha
         return regraObterDigitos.Replace(texto, "");
     }
 
-    // O formato da data fornecido é "dd/MM/yyyy", processamento necessário para manter o formato.
     private DateOnly ConverterDateTimeEmDateOnly(string stringData)
     {
         if (string.IsNullOrWhiteSpace(stringData))

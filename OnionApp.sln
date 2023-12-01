@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aplicacao", "Aplicacao\Apli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dominio", "Dominio\Dominio.csproj", "{37F0FD12-F45B-4C83-9E6E-6C0AB323E18D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{1E379766-8C0C-445F-B420-C2B5DCAC280E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{1E379766-8C0C-445F-B420-C2B5DCAC280E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

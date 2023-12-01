@@ -10,21 +10,23 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class PlanilhaController : Controller
 {
-    private readonly AppDbContext _context;
-    private readonly ILeitorPlanilha _leitorPlanilha;
+    private readonly IGestaoPlanilhaService _gestorPlanilha;
     private readonly ProcessarDados _processamento;
 
     public PlanilhaController(
-        AppDbContext context, 
-        ILeitorPlanilha leitorPlanilha,
+        IGestaoPlanilhaService gestorPlanilha,
         ProcessarDados processamento
         )
     {
-        _context = context;
-        _leitorPlanilha = leitorPlanilha;
+        _gestorPlanilha = gestorPlanilha;
         _processamento = processamento;
     }
 
+    /// <summary>
+    /// Importar planilha de pedidos e processar dados para salvar no banco de dados.
+    /// </summary>
+    /// <param name="planilha"></param>
+    /// <returns>Um código HTTP com uma mensagem de sucesso ou falha no processamento dos dados</returns>
     [Consumes("multipart/form-data")]
     [HttpPost("ImportarPlanilha")]
     public async Task<ActionResult<PlanilhaDTO>> ImportarPlanilha(IFormFile planilha)
@@ -36,28 +38,12 @@ public class PlanilhaController : Controller
         }
 
         // Retornar lista de dados na planilha
-        var listaPedidos = await _leitorPlanilha.LerPedidos(planilha);
+        var listaPedidos = await _gestorPlanilha.LerPedidos(planilha);
 
-        await ProcessarPlanilha(listaPedidos);
+        var resultado = await _gestorPlanilha.ProcessarPlanilha(listaPedidos, _processamento);
 
-        return Ok();
-    }
-
-    private async Task<ActionResult> ProcessarPlanilha(IEnumerable<PlanilhaDTO> listaPedidos)
-    {
-        // Checar se arquivo existe e possui conteúdo (garantir)
-        if (listaPedidos is null || !listaPedidos.Any())
-        {
-            return BadRequest("Dados da planilha estão vazios");
-        }
-
-        foreach (var pedido in listaPedidos)
-        {
-            await _processamento.CadastrarCliente(pedido);
-            await _processamento.CadastrarProdutoPedido(pedido);
-        }
-
-        return Ok();
+        return resultado.Successo ? 
+            Ok(resultado.Mensagem) : BadRequest(resultado.Mensagem);
     }
 
 }
