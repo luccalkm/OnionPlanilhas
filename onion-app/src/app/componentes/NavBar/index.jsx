@@ -1,5 +1,5 @@
 
-import cebola from '../../../assets/onion_planilha_logo.png';
+import logo_onion from '../../../assets/onion_planilha_logo.png';
 import { StyledNavBar } from './styles';
 
 export function NavBar() {
@@ -7,7 +7,7 @@ export function NavBar() {
     <StyledNavBar.Container>
       <StyledNavBar.Logo href="/">Onion S.A.
       </StyledNavBar.Logo>
-      <StyledNavBar.LogoImg src={cebola} />
+      <StyledNavBar.LogoImg src={logo_onion} />
     </StyledNavBar.Container>
   );
 };

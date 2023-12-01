@@ -2,14 +2,15 @@ import styled from "styled-components";
 import {primaryColor, baseFontSize } from "../GlobalStyles";
 
 export const Container = styled.nav`
-  display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px;
+    width: 100%;
+    margin: 15px auto 0px auto;
 `;
 
 export const Logo = styled.h2`
-    font-size: ${baseFontSize};
+    font-size: calc(${baseFontSize}*1.6);
     font-weight: bold;
     color: ${primaryColor};
 `;

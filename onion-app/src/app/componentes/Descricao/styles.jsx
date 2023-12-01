@@ -1,30 +1,27 @@
 import styled from "styled-components";
-import {primaryColor, baseFontSize, basePadding } from "../GlobalStyles";
+import { flexColumnCenterStyles, primaryColor, baseFontSize, basePadding } from "../GlobalStyles";
 
 const Container = styled.article`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 50%;
+    ${flexColumnCenterStyles};
+    width: 70%;
     margin: 0 auto;
-    padding: ${basePadding};
+`;
+
+const Holder = styled.div`
+    ${Container};
 `;
 
 const Titulo = styled.h1`
-    font-size: 32px;
     color: ${primaryColor};
-    padding: 0 ${basePadding};
+`;
+
+const Subtitulo = styled.h3`
+    color: ${primaryColor};
 `;
 
 const Secao = styled.section`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: ${basePadding};
-
-    a {
-        margin-top: 25px;
-    }
+    ${flexColumnCenterStyles};
+    padding: calc(${basePadding} * 0.5) 0;
 `;
 
 const baseTexto = styled.p`
@@ -43,7 +40,9 @@ const TextoNegrito = styled(baseTexto)`
 
 export const StyledDescricao = {
     Container,
+    Holder,
     Titulo,
+    Subtitulo,
     Secao,
     Texto,
     TextoNegrito

@@ -1,23 +1,30 @@
 export const AppConfig = {
   telaDescricao: {
-    titulo: "Como Utilizar o Sistema?",
+    titulo: "Bem-vindo(a)! Vamos facilitar seu trabalho com nossas planilhas.",
+    subtitulo: "Como funciona o sistema? É simples!",
     instrucoes: {
-      introducao: {
-        titulo: "Iniciando",
-        descricao:
-          "Bem-vindo(a)! Para começar a utilizar o sistema, é simples: primeiro, selecione o arquivo da sua planilha contendo os dados dos pedidos. Clique em 'Escolher arquivo' e busque o arquivo desejado no seu computador. Depois de selecionar o arquivo, clique em 'Enviar'. O sistema irá processar suas informações e exibir os gráficos para análise dos dados.",
-      },
-      pergunta: {
-        titulo: "Dúvidas na Formatação da Planilha?",
-        descricao:
-          "Não tem certeza de como formatar a sua planilha? Sem problemas!",
-      },
-      comoBaixar: {
-        titulo: "Baixe o Modelo da Planilha",
-        descricao:
-          "Disponibilizamos um modelo para você. Clique no botão abaixo para baixar o modelo de planilha. Ele servirá como guia para estruturar seus dados corretamente e garantir que o sistema possa analisá-los sem problemas.",
-      },
+      passos: [
+        {
+          id: 1,
+          titulo: "Preparando Sua Planilha",
+          descricao:
+            "Certifique-se de que sua planilha esteja no formato adequado para que possamos processá-la com eficiência. A formatação correta é essencial para um processamento bem-sucedido.",
+          dica: "Tem dúvidas sobre a formatação? Fique tranquilo(a), nós te ajudamos!",
+        },
+        {
+          id: 2,
+          titulo: "Baixe Nosso Modelo",
+          descricao:
+            "Para facilitar, disponibilizamos um modelo de planilha. Utilize-o como referência para estruturar seus dados de maneira correta. Isso garante que nosso sistema possa analisar suas informações sem contratempos.",
+          linkDownload: "../../assets/modelo_planilha.xlsx",
+        },
+        {
+          id: 3,
+          titulo: "Envie e Relaxe",
+          descricao:
+            "Após formatar sua planilha conforme nosso modelo, faça o upload dela. Deixe o restante conosco! Nós cuidaremos do processamento e garantiremos que tudo corra bem.",
+        },
+      ],
     },
   },
-  linkDownload: "../../assets/modelo_planilha.xlsx",
 };
