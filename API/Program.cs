@@ -11,10 +11,10 @@ using API.Servicos.Processamento;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registrar provedor de codificação do Windows
+// Registrar provedor de codificaï¿½ï¿½o do Windows
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-// Adicionar Serviços
+// Adicionar Serviï¿½os
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,8 +24,17 @@ builder.Services.AddHttpClient();
 // Mapeamentos
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(PlanilhaProfile));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .WithMethods("GET", "POST")
+              .AllowAnyHeader();
+    });
+});
 
-// Serviços personalizados
+// Serviï¿½os personalizados
 builder.Services.AddScoped<IGestaoPlanilhaService, GestaoPlanilhaService>();
 builder.Services.AddScoped<ProcessarDados>(); 
 builder.Services.AddScoped<ViaCepService>();
@@ -34,7 +43,8 @@ builder.Services.AddScoped<FreteService>();
 builder.Services.AddScoped<IProcessamentoService, ProcessamentoService>();
 
 
-// Adicionar conexão com o banco de dados conforme banco de dados utilizado
+
+// Adicionar conexï¿½o com o banco de dados conforme banco de dados utilizado
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -53,8 +63,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Criação de banco de dados
-// "using" no escopo para otimização
+// Criaï¿½ï¿½o de banco de dados
+// "using" no escopo para otimizaï¿½ï¿½o
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
@@ -65,14 +75,14 @@ try
     await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
 
-    // Inicializar dados padrões no banco de dados
+    // Inicializar dados padrï¿½es no banco de dados
     await DbInitializer.SeedData(context);
 }
 catch (Exception e)
 {
     // Registro de erros de migrations em log
     var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(e, "Um erro ocorreu durante a migração do banco de dados.");
+    logger.LogError(e, "Um erro ocorreu durante a migraï¿½ï¿½o do banco de dados.");
 }
 
 

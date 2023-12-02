@@ -47,23 +47,23 @@ public class ProcessamentoService : IProcessamentoService
         return resultado;
     }
 
-    public async Task<IEnumerable<VendasRegiaoDTO>> ObterVendasPorRegiao()
-    {
-        if (_cache.TryGetValue("ultimaListaPedidos", out IEnumerable<PlanilhaDTO> listaPedidos))
-        {
-            return await _dashboardService.ObterVendasPorRegiao(listaPedidos);
-        }
-        throw new KeyNotFoundException("Lista de pedidos não encontrada no cache.");
-    }
+    //public async Task<IEnumerable<VendasRegiaoDTO>> ObterVendasPorRegiao()
+    //{
+    //    if (_cache.TryGetValue("ultimaListaPedidos", out IEnumerable<PlanilhaDTO> listaPedidos))
+    //    {
+    //        return await _dashboardService.ObterVendasPorRegiao(listaPedidos);
+    //    }
+    //    throw new KeyNotFoundException("Lista de pedidos não encontrada no cache.");
+    //}
 
-    public async Task<IEnumerable<VendasProdutoDTO>> ObterVendasPorProduto()
-    {
-        if (_cache.TryGetValue("ultimaListaPedidos", out IEnumerable<PlanilhaDTO> listaPedidos))
-        {
-            return _dashboardService.ObterVendasPorProduto(listaPedidos);
-        }
-        throw new KeyNotFoundException("Lista de pedidos não encontrada no cache.");
-    }
+    //public async Task<IEnumerable<VendasProdutoDTO>> ObterVendasPorProduto()
+    //{
+    //    if (_cache.TryGetValue("ultimaListaPedidos", out IEnumerable<PlanilhaDTO> listaPedidos))
+    //    {
+    //        return _dashboardService.ObterVendasPorProduto(listaPedidos);
+    //    }
+    //    throw new KeyNotFoundException("Lista de pedidos não encontrada no cache.");
+    //}
 
     public async Task<List<ListaVendasDTO>> ObterListaVendas()
     {

@@ -21,7 +21,7 @@ public class PlanilhaController : Controller
         _configuration = configuration;
     }
 
-    [HttpGet("DownloadModeloPlanilha")]
+    [HttpGet("DownloadModelo")]
     public IActionResult DownloadModeloPlanilha()
     {
         string caminhoModelo = _configuration["PlanilhaModelo:Caminho"];
@@ -44,17 +44,17 @@ public class PlanilhaController : Controller
         return await _processamentoService.ImportarPlanilha(planilha);
     }
 
-    [HttpGet("ObterVendasPorRegiao")]
-    public async Task<IEnumerable<VendasRegiaoDTO>> ConsultarVendasPorRegiao()
-    {
-        return await _processamentoService.ObterVendasPorRegiao();
-    }
+    //[HttpGet("ObterVendasPorRegiao")]
+    //public async Task<IEnumerable<VendasRegiaoDTO>> ConsultarVendasPorRegiao()
+    //{
+    //    return await _processamentoService.ObterVendasPorRegiao();
+    //}
 
-    [HttpGet("ObterVendasPorProduto")]
-    public async Task<IEnumerable<VendasProdutoDTO>> ConsultarVendasPorProduto()
-    {
-        return await _processamentoService.ObterVendasPorProduto();
-    }
+    //[HttpGet("ObterVendasPorProduto")]
+    //public async Task<IEnumerable<VendasProdutoDTO>> ConsultarVendasPorProduto()
+    //{
+    //    return await _processamentoService.ObterVendasPorProduto();
+    //}
 
     [HttpGet("ObterListaVendas")]
     public async Task<List<ListaVendasDTO>> ConsultarListaVendas()

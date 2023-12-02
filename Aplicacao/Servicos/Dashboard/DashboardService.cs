@@ -1,98 +1,71 @@
 ﻿using Aplicacao.DTOs;
 using Aplicacao.Servicos.Frete;
 using Aplicacao.Servicos.Integracao;
+using Dominio;
 
-namespace Aplicacao.Servicos.Dashboard;
-
-public class DashboardService
+namespace Aplicacao.Servicos.Dashboard
 {
-    private readonly FreteService _freteService;
-    private readonly ViaCepService _viaCepService;
-
-    public DashboardService(FreteService freteService, ViaCepService viaCepService)
-    {;
-        _freteService = freteService;
-        _viaCepService = viaCepService;
-    }
-
-    public async Task<List<VendasRegiaoDTO>> ObterVendasPorRegiao(IEnumerable<PlanilhaDTO> listaPedidos)
+    public class DashboardService
     {
-        // Processar quantidade agrupando por CEP
-        var vendasPorCep = new Dictionary<string, int>();
-        foreach (var pedido in listaPedidos)
+        private readonly FreteService _freteService;
+        private readonly ViaCepService _viaCepService;
+
+        public DashboardService(FreteService freteService, ViaCepService viaCepService)
         {
-            if (!vendasPorCep.ContainsKey(pedido.CEP))
-            {
-                vendasPorCep[pedido.CEP] = 0;
-            }
-            vendasPorCep[pedido.CEP]++;
+            _freteService = freteService;
+            _viaCepService = viaCepService;
         }
 
-        var regioes = new Dictionary<string, string>(); // CEP -> Região
-        var agrupamentoRegiao = new Dictionary<string, int>(); // Região -> Quantidade
-
-        // Processar quantidade agrupando por Região
-        foreach (var cep in vendasPorCep.Keys)
+        public async Task<List<VendasRegiaoDTO>> ObterVendasPorRegiao(IEnumerable<PlanilhaDTO> listaPedidos)
         {
-            if (!regioes.ContainsKey(cep))
-            {
-                var regiao = await _viaCepService.ObterRegiaoPorCep(cep);
-                regioes[cep] = regiao.Nome;
-            }
+            var ceps = listaPedidos.Select(p => p.CEP);
+            var regioes = await ObterRegioesCepsAgrupados(ceps);
 
-            var regiaoNome = regioes[cep];
-            if (!agrupamentoRegiao.ContainsKey(regiaoNome))
-            {
-                agrupamentoRegiao[regiaoNome] = 0;
-            }
-            agrupamentoRegiao[regiaoNome] += vendasPorCep[cep];
+            var agrupamentoRegiao = listaPedidos.GroupBy(p => regioes[p.CEP].Nome)
+                                                .ToDictionary(g => g.Key, g => g.Count());
+
+            return agrupamentoRegiao.Select(r => new VendasRegiaoDTO { Regiao = r.Key, Quantidade = r.Value }).ToList();
         }
 
-        // Retornar lista de vendas por região
-        return agrupamentoRegiao
-            .Select(r => new VendasRegiaoDTO { Regiao = r.Key, Quantidade = r.Value })
-            .ToList();
+        public List<VendasProdutoDTO> ObterVendasPorProduto(IEnumerable<PlanilhaDTO> listaPedidos)
+        {
+            var agrupamentoProduto = listaPedidos.GroupBy(p => p.Produto)
+                                                 .ToDictionary(g => g.Key, g => g.Count());
+
+            return agrupamentoProduto.Select(r => new VendasProdutoDTO { Produto = r.Key, Quantidade = r.Value }).ToList();
+        }
+
+        public async Task<List<ListaVendasDTO>> ObterListaVendas(IEnumerable<PlanilhaDTO> listaPedidos)
+        {
+            var ceps = listaPedidos.Select(p => p.CEP);
+            var regioes = await ObterRegioesCepsAgrupados(ceps);
+
+            var listaVendas = new List<ListaVendasDTO>();
+            foreach (var pedido in listaPedidos)
+            {
+                var regiao = regioes[pedido.CEP];
+                var venda = new ListaVendasDTO
+                {
+                    Cliente = pedido.RazaoSocial,
+                    Produto = pedido.Produto,
+                    ValorTotal = await _freteService.CalcularPrecoComFrete(pedido.Produto, regiao),
+                    DataEntrega = _freteService.CalcularTempoEntrega(pedido.Data, regiao),
+                    Regiao = regiao.Nome
+                };
+
+                listaVendas.Add(venda);
+            }
+            return listaVendas;
+        }
+
+        private async Task<Dictionary<string, RegiaoDTO>> ObterRegioesCepsAgrupados(IEnumerable<string> ceps)
+        {
+            var regioes = new Dictionary<string, RegiaoDTO>();
+            foreach (var cep in ceps.Distinct())
+            {
+                regioes[cep] = await _viaCepService.ObterRegiaoPorCep(cep);
+            }
+            return regioes;
+        }
     }
-
-    public async Task<List<VendasProdutoDTO>> ObterVendasPorProduto(IEnumerable<PlanilhaDTO> listaPedidos)
-    {
-        // Processar quantidade agrupando por produto
-        var agrupamentoProduto = new Dictionary<string, int>();
-        var vendasPorProduto = new List<VendasProdutoDTO>();
-
-        // Processar quantidade por produto
-        foreach(var pedido in listaPedidos)
-        {
-            if (!agrupamentoProduto.ContainsKey(pedido.Produto))
-            {
-                agrupamentoProduto[pedido.Produto] = 0;
-            }
-            agrupamentoProduto[pedido.Produto]++;
-        }
-
-        // Retornar lista de vendas por produto
-        return agrupamentoProduto
-            .Select(r => new VendasProdutoDTO { Produto = r.Key, Quantidade = r.Value })
-            .ToList();
-    }
-
-    public async Task<List<ListaVendasDTO>> ObterListaVendas(IEnumerable<PlanilhaDTO> listaPedidos)
-    {
-        var listaVendas = new List<ListaVendasDTO>();
-        foreach (var pedido in listaPedidos)
-        {
-            var regiao = await _viaCepService.ObterRegiaoPorCep(pedido.CEP);
-            var venda = new ListaVendasDTO
-            {
-                Cliente = pedido.RazaoSocial,
-                Produto = pedido.Produto,
-                ValorTotal = await _freteService.CalcularPrecoComFrete(pedido.Produto, regiao),
-                DataEntrega = _freteService.CalcularTempoEntrega(pedido.Data, regiao),
-            };
-
-            listaVendas.Add(venda);
-        }
-        return listaVendas;
-    }
-
 }
