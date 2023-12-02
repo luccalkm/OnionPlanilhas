@@ -1,11 +1,10 @@
 import { StyledDescricao } from "./styles.jsx";
 import { BotaoDownload } from "../Download/index.jsx";
 import { AppConfig } from "../../configuracao/config";
-import { useEffect } from "react";
 
 export function Descricao() {
   // Recuperar textos e títulos da tela de descrição do arquivo de configuração
-  const { titulo, subtitulo, instrucoes, linkDownload } = AppConfig.telaDescricao;
+  const { titulo, subtitulo, instrucoes } = AppConfig.telaDescricao;
   const { passos } = instrucoes;
 
   const {Container, Holder, Titulo, Subtitulo, Secao, Texto } = StyledDescricao;
@@ -24,7 +23,7 @@ export function Descricao() {
           {/* Renderizar botão conforme passo correspondente ao download */}
           {
           passo.id == 2 && 
-            <BotaoDownload href={passo.linkDownload} />
+            <BotaoDownload />
           }
         </Secao>
       ))}

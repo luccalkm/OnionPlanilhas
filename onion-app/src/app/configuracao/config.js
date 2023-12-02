@@ -1,4 +1,5 @@
 export const AppConfig = {
+  tituloHome: "Onion Planilhas",
   telaDescricao: {
     titulo: "Bem-vindo(a)! Vamos facilitar seu trabalho com nossas planilhas.",
     subtitulo: "Como funciona o sistema? É simples!",

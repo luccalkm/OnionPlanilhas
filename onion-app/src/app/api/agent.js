@@ -1,20 +1,36 @@
-import axios from 'axios'
+import axios from "axios";
 
 const sleep = (delay) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay)
-    })
-}
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay);
+  });
+};
 
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.baseURL = "http://localhost:5000/api";
 
 const requests = {
-    get: (url) => axios.get(url).then((res) => res.data),
-    post: (url, body) => axios.post(url, body).then((res) => res.data)
-}
+  get: (url, opt = {}) => axios.get(url, opt).then((response) => response.data),
+  post: (url, body, options = {}) => axios.post(url, body, options).then(response => response.data),
+};
 
 const Planilhas = {
-    list: () => requests.get('/planilhas'),
-    details: (id) => requests.get(`/planilhas/${id}`)
-    
-}
+  downloadModelo: () => requests.get("/Planilha/DownloadModelo", { responseType: 'blob' }),
+  importarPlanilha: (file) => {
+    let formData = new FormData();
+    formData.append("planilha", file);
+    return requests.post("/Planilha/ImportarPlanilha", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+};
+
+const Dashboard = {
+  listaVendas: () => requests.get("/Planilha/ObterListaVendas"),
+  vendasPorRegiao: () => requests.get("/Planilha/ObterVendasPorRegiao"),
+  vendasPorProduto: () => requests.get("/Planilha/ObterVendasPorProduto"),
+};
+
+export const agent = {
+  Planilhas,
+  Dashboard,
+};

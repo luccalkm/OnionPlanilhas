@@ -1,44 +1,40 @@
-import { StyledDownload } from './styles.jsx';
-import { useState, useEffect } from 'react';
+import { StyledDownload } from "./styles.jsx";
+import { useEffect, useState } from "react";
+import { agent } from "../../api/agent.js";
+import Loading from "../common/LoadingSpinner/styles.jsx";
+import { useLoadingOnClick } from "../../../features/useLoadingOnClick.jsx";
 
-export function BotaoDownload(props) {
-    const [isLoading, setIsLoading] = useState(false);
+export function BotaoDownload() {
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const { isLoading, enableLoading, disableLoading } = useLoadingOnClick();
 
-    useEffect(() => {
-        // Limpar o estado quando o componente desmontar
-        return () => {
-            setIsLoading(false);
-        };
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await agent.Planilhas.downloadModelo();
+        const url = window.URL.createObjectURL(
+          new Blob([response], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          })
+        );
+        setDownloadUrl(url);
+      } catch (error) {
+        console.error("Erro no download:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
-    const handleClick = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-
-        try {
-            // Realizar a operação de download aqui.
-            // Por exemplo, se for necessário fazer uma chamada de API
-            // para obter a URL de download, faça aqui.
-
-            // Após concluir o download ou obter a URL:
-            setIsLoading(false);
-        } catch (error) {
-            console.error('Erro no download:', error);
-            setIsLoading(false);
-        }
-    }
-
-    const buttonText = isLoading ? "Carregando..." : "Baixar";
-
-    return (
-        <StyledDownload.Link 
-            onClick={handleClick}
-            onMouseLeave={() => setIsLoading(false)}
-            href={props.href}
-            download
-            aria-label={buttonText}
-        >
-            {buttonText}
-        </StyledDownload.Link>
-    );
+  return (
+    <>
+      <StyledDownload.Link
+        onClick={enableLoading}
+        onMouseLeave={disableLoading}
+        href={downloadUrl}
+        download="Modelo_Planilha_Onion.xlsx"
+      >
+        {isLoading ? <Loading /> : "Baixar"}
+      </StyledDownload.Link>
+    </>
+  );
 }

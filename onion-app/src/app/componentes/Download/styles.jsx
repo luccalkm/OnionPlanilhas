@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { primaryColor, baseFontSize } from "../GlobalStyles";
+import { primaryColor, flexColumnCenterStyles } from "../GlobalStyles";
 
 const Link = styled.a`
+  display: flex;
+  justify-content: center;
   color: ${primaryColor};
   text-decoration: none;
   padding: 8px 16px;
