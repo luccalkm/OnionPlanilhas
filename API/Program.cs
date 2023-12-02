@@ -7,6 +7,7 @@ using Aplicacao.Servicos;
 using Aplicacao.Servicos.Integracao;
 using Aplicacao.Servicos.Frete;
 using Aplicacao.Servicos.Dashboard;
+using API.Servicos.Processamento;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ builder.Services.AddScoped<ProcessarDados>();
 builder.Services.AddScoped<ViaCepService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<FreteService>();
+builder.Services.AddScoped<IProcessamentoService, ProcessamentoService>();
 
 
 // Adicionar conexão com o banco de dados conforme banco de dados utilizado

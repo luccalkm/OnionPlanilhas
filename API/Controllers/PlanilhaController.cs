@@ -1,9 +1,8 @@
-﻿using Aplicacao.DTOs;
-using Aplicacao.Servicos.Dashboard;
-using API.Servicos.ProcessarArquivos;
+﻿using API.Servicos.GestaoPlanilha;
+using API.Servicos.Processamento;
+using Aplicacao.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using Aplicacao.Servicos;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Controllers;
 
@@ -11,86 +10,55 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class PlanilhaController : Controller
 {
-    IMemoryCache _cache;
-    private readonly IGestaoPlanilhaService _planilhaService;
-    private readonly ProcessarDados _processamento;
-    private readonly DashboardService _dashboardService;
+    private readonly IProcessamentoService _processamentoService;
+    private readonly IConfiguration _configuration;
 
     public PlanilhaController(
-        IMemoryCache cache,
-        IGestaoPlanilhaService gestorPlanilha,
-        ProcessarDados processamento,
-        DashboardService dashboardService
-        )
+        IProcessamentoService processamentoService,
+        IConfiguration configuration)
     {
-        _cache = cache;
-        _planilhaService = gestorPlanilha;
-        _processamento = processamento;
-        _dashboardService = dashboardService;
+        _processamentoService = processamentoService;
+        _configuration = configuration;
     }
 
-    //TODO: Implementar filtro por planilha inserida e remover cache
-
-    /// <summary>
-    /// Importar planilha de pedidos e processar dados para salvar no banco de dados.
-    /// </summary>
-    /// <param name="planilha"></param>
-    /// <returns>Um código HTTP com uma mensagem de sucesso ou falha no processamento dos dados</returns>
-    [Consumes("multipart/form-data")]
-    [HttpPost("ImportarPlanilha")]
-    public async Task<ActionResult<PlanilhaDTO>> ImportarPlanilha(IFormFile planilha)
+    [HttpGet("DownloadModeloPlanilha")]
+    public IActionResult DownloadModeloPlanilha()
     {
-        // Checar se arquivo existe e possui conteúdo
-        if (planilha is null || planilha.Length == 0)
+        string caminhoModelo = _configuration["PlanilhaModelo:Caminho"];
+        if (!System.IO.File.Exists(caminhoModelo))
         {
-            return BadRequest("Arquivo não fornecido corretamente.");
+            return NotFound();
         }
 
-        // Retornar lista de dados na planilha
-        var listaPedidos = await _planilhaService.LerPedidos(planilha);
+        var stream = new FileStream(caminhoModelo, FileMode.Open, FileAccess.Read);
+        return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        {
+            FileDownloadName = Path.GetFileName(caminhoModelo)
+        };
+    }
 
-        // Salvar em cache para usar em outro local e otimizar geração de gráficos
-        var cacheKey = "ultimaListaPedidos";
-        _cache.Set(cacheKey, listaPedidos, TimeSpan.FromMinutes(10));
-
-        var resultado = await _planilhaService.ProcessarPlanilha(listaPedidos, _processamento);
-
-        return resultado.Successo ?
-            Ok(listaPedidos) : BadRequest(resultado.Mensagem);
+    [Consumes("multipart/form-data")]
+    [HttpPost("ImportarPlanilha")]
+    public async Task<ActionResult<ResultadoProcessamento>> ImportarPlanilha(IFormFile planilha)
+    {
+        return await _processamentoService.ImportarPlanilha(planilha);
     }
 
     [HttpGet("ObterVendasPorRegiao")]
-    public async Task<ActionResult<VendasRegiaoDTO>> ConsultarVendasPorRegiao()
+    public async Task<IEnumerable<VendasRegiaoDTO>> ConsultarVendasPorRegiao()
     {
-        return await ObterVendas(
-            "ultimaListaPedidos", _dashboardService.ObterVendasPorRegiao
-            );
+        return await _processamentoService.ObterVendasPorRegiao();
     }
 
     [HttpGet("ObterVendasPorProduto")]
-    public async Task<ActionResult<VendasProdutoDTO>> ConsultarVendasPorProduto()
+    public async Task<IEnumerable<VendasProdutoDTO>> ConsultarVendasPorProduto()
     {
-        return await ObterVendas(
-            "ultimaListaPedidos", _dashboardService.ObterVendasPorProduto
-            );
+        return await _processamentoService.ObterVendasPorProduto();
     }
 
     [HttpGet("ObterListaVendas")]
-    public async Task<ActionResult<ListaVendasDTO>> ConsultarListaVendas()
+    public async Task<List<ListaVendasDTO>> ConsultarListaVendas()
     {
-        return await ObterVendas(
-            "ultimaListaPedidos", _dashboardService.ObterListaVendas
-            );
+        return await _processamentoService.ObterListaVendas();
     }
-    private async Task<ActionResult> ObterVendas<T>(string cacheKey, Func<IEnumerable<PlanilhaDTO>, Task<T>> obterVendasFunc)
-    {
-        if (_cache.TryGetValue(cacheKey, out IEnumerable<PlanilhaDTO> listaPedidos))
-        {
-            var vendas = await obterVendasFunc(listaPedidos!);
-            return Ok(vendas);
-        }
-        return NotFound("Lista de pedidos não encontrada, por favor, insira novamente.");
-    }
-
-
 }
