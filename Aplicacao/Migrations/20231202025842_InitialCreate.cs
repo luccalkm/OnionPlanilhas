@@ -39,6 +39,20 @@ namespace Aplicacao.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Regiao",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", nullable: false),
+                    UF = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Regiao", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pedidos",
                 columns: table => new
                 {
@@ -105,6 +119,9 @@ namespace Aplicacao.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ProdutoPedidos");
+
+            migrationBuilder.DropTable(
+                name: "Regiao");
 
             migrationBuilder.DropTable(
                 name: "Pedidos");

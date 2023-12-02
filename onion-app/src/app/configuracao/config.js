@@ -16,7 +16,6 @@ export const AppConfig = {
           titulo: "Baixe Nosso Modelo",
           descricao:
             "Para facilitar, disponibilizamos um modelo de planilha. Utilize-o como referência para estruturar seus dados de maneira correta. Isso garante que nosso sistema possa analisar suas informações sem contratempos.",
-          linkDownload: "../../assets/modelo_planilha.xlsx",
         },
         {
           id: 3,

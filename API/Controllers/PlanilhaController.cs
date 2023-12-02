@@ -1,8 +1,9 @@
 ﻿using Aplicacao.DTOs;
-using Aplicacao.Persistencia;
+using Aplicacao.Servicos.Dashboard;
 using API.Servicos.ProcessarArquivos;
 using Microsoft.AspNetCore.Mvc;
 using Aplicacao.Servicos;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace API.Controllers;
 
@@ -10,17 +11,25 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class PlanilhaController : Controller
 {
-    private readonly IGestaoPlanilhaService _gestorPlanilha;
+    IMemoryCache _cache;
+    private readonly IGestaoPlanilhaService _planilhaService;
     private readonly ProcessarDados _processamento;
+    private readonly DashboardService _dashboardService;
 
     public PlanilhaController(
+        IMemoryCache cache,
         IGestaoPlanilhaService gestorPlanilha,
-        ProcessarDados processamento
+        ProcessarDados processamento,
+        DashboardService dashboardService
         )
     {
-        _gestorPlanilha = gestorPlanilha;
+        _cache = cache;
+        _planilhaService = gestorPlanilha;
         _processamento = processamento;
+        _dashboardService = dashboardService;
     }
+
+    //TODO: Implementar filtro por planilha inserida e remover cache
 
     /// <summary>
     /// Importar planilha de pedidos e processar dados para salvar no banco de dados.
@@ -38,12 +47,50 @@ public class PlanilhaController : Controller
         }
 
         // Retornar lista de dados na planilha
-        var listaPedidos = await _gestorPlanilha.LerPedidos(planilha);
+        var listaPedidos = await _planilhaService.LerPedidos(planilha);
 
-        var resultado = await _gestorPlanilha.ProcessarPlanilha(listaPedidos, _processamento);
+        // Salvar em cache para usar em outro local e otimizar geração de gráficos
+        var cacheKey = "ultimaListaPedidos";
+        _cache.Set(cacheKey, listaPedidos, TimeSpan.FromMinutes(10));
 
-        return resultado.Successo ? 
-            Ok(resultado.Mensagem) : BadRequest(resultado.Mensagem);
+        var resultado = await _planilhaService.ProcessarPlanilha(listaPedidos, _processamento);
+
+        return resultado.Successo ?
+            Ok(listaPedidos) : BadRequest(resultado.Mensagem);
     }
+
+    [HttpGet("ObterVendasPorRegiao")]
+    public async Task<ActionResult<VendasRegiaoDTO>> ConsultarVendasPorRegiao()
+    {
+        return await ObterVendas(
+            "ultimaListaPedidos", _dashboardService.ObterVendasPorRegiao
+            );
+    }
+
+    [HttpGet("ObterVendasPorProduto")]
+    public async Task<ActionResult<VendasProdutoDTO>> ConsultarVendasPorProduto()
+    {
+        return await ObterVendas(
+            "ultimaListaPedidos", _dashboardService.ObterVendasPorProduto
+            );
+    }
+
+    [HttpGet("ObterListaVendas")]
+    public async Task<ActionResult<ListaVendasDTO>> ConsultarListaVendas()
+    {
+        return await ObterVendas(
+            "ultimaListaPedidos", _dashboardService.ObterListaVendas
+            );
+    }
+    private async Task<ActionResult> ObterVendas<T>(string cacheKey, Func<IEnumerable<PlanilhaDTO>, Task<T>> obterVendasFunc)
+    {
+        if (_cache.TryGetValue(cacheKey, out IEnumerable<PlanilhaDTO> listaPedidos))
+        {
+            var vendas = await obterVendasFunc(listaPedidos!);
+            return Ok(vendas);
+        }
+        return NotFound("Lista de pedidos não encontrada, por favor, insira novamente.");
+    }
+
 
 }

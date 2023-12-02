@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using API.MapperProfiles;
 using Aplicacao.Servicos;
+using Aplicacao.Servicos.Integracao;
+using Aplicacao.Servicos.Frete;
+using Aplicacao.Servicos.Dashboard;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +17,20 @@ Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
 
+// Mapeamentos
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(PlanilhaProfile));
 
+// Serviços personalizados
 builder.Services.AddScoped<IGestaoPlanilhaService, GestaoPlanilhaService>();
-builder.Services.AddScoped<ProcessarDados>();
+builder.Services.AddScoped<ProcessarDados>(); 
+builder.Services.AddScoped<ViaCepService>();
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<FreteService>();
+
 
 // Adicionar conexão com o banco de dados conforme banco de dados utilizado
 builder.Services.AddDbContext<AppDbContext>(opt =>

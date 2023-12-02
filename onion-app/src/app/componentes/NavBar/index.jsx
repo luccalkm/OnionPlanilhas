@@ -3,11 +3,14 @@ import logo_onion from '../../../assets/onion_planilha_logo.png';
 import { StyledNavBar } from './styles';
 
 export function NavBar() {
+
+  const {Container, Logo, LogoImg} = StyledNavBar
+
   return (
-    <StyledNavBar.Container>
-      <StyledNavBar.Logo href="/">Onion S.A.
-      </StyledNavBar.Logo>
-      <StyledNavBar.LogoImg src={logo_onion} />
-    </StyledNavBar.Container>
+    <Container>
+      <Logo href="/">Onion S.A.
+      </Logo>
+      <LogoImg src={logo_onion} />
+    </Container>
   );
 };

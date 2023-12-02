@@ -11,7 +11,6 @@ namespace API.Servicos.ProcessarArquivos;
 
 public class GestaoPlanilhaService : IGestaoPlanilhaService
 {
-
     public async Task<IEnumerable<PlanilhaDTO>> LerPedidos(IFormFile planilha)
     {
         // Checa se a planilha é nula caso algum erro aconteça no código do controlador
@@ -39,9 +38,9 @@ public class GestaoPlanilhaService : IGestaoPlanilhaService
 
             var itemPlanilha = new PlanilhaDTO
             {
-                NumeroDocumento = RemoverCaracteresEspeciais(numeroDocumento.ToString()!.Trim()),
+                NumeroDocumento = ValidarNumeroDocumento(numeroDocumento.ToString()!.Trim()),
                 RazaoSocial = worksheet.Cells[row, 2].Value.ToString()!.Trim(),
-                CEP = RemoverCaracteresEspeciais(worksheet.Cells[row, 3].Value.ToString()!.Trim()),
+                CEP = ValidarCEP(worksheet.Cells[row, 3].Value.ToString()!.Trim()),
                 Produto = worksheet.Cells[row, 4].Value.ToString()!.Trim(),
                 NumeroPedido = int.Parse(worksheet.Cells[row, 5].Value.ToString()!.Trim()),
                 Data = ConverterDateTimeEmDateOnly(worksheet.Cells[row, 6].Value.ToString()!.Trim()),
@@ -81,6 +80,29 @@ public class GestaoPlanilhaService : IGestaoPlanilhaService
         return regraObterDigitos.Replace(texto, "");
     }
 
+    private string ValidarNumeroDocumento(string numeroDocumento)
+    {
+        var numeroDocumentoFormatado = RemoverCaracteresEspeciais(numeroDocumento);
+
+        if (numeroDocumentoFormatado.Length == 11 || numeroDocumentoFormatado.Length == 14)
+        {
+            return numeroDocumentoFormatado;
+        }
+
+        throw new FormatException($"O CPF ou CNPJ informado está incorreto e possui {numeroDocumento.Length} digitos. Deve ter 11 (CPF) ou 14 (CNPJ).");
+    }
+
+    private string ValidarCEP(string cep)
+    {
+        var cepFormatado = RemoverCaracteresEspeciais(cep);
+
+        if (cepFormatado.Length == 8)
+        {
+            return cepFormatado;
+        }
+        throw new Exception($"O CEP informado está incorreto e possui apenas {cep.Length} digitos. CEP: {cep}");
+    }
+    
     private DateOnly ConverterDateTimeEmDateOnly(string stringData)
     {
         if (string.IsNullOrWhiteSpace(stringData))

@@ -9,11 +9,7 @@ export function Descricao() {
   const { passos } = instrucoes;
 
   const {Container, Holder, Titulo, Subtitulo, Secao, Texto } = StyledDescricao;
-
-  useEffect(() => {
-    console.log(passos)
-  }, [])
-
+  
   return (
     <Container>
       <Holder>
@@ -28,9 +24,7 @@ export function Descricao() {
           {/* Renderizar botão conforme passo correspondente ao download */}
           {
           passo.id == 2 && 
-            <BotaoDownload href={passo.linkDownload}>
-              Baixar Modelo de Planilha
-            </BotaoDownload>
+            <BotaoDownload href={passo.linkDownload} />
           }
         </Secao>
       ))}

@@ -1,7 +1,7 @@
 import { css, createGlobalStyle } from "styled-components";
 
 export const primaryColor = "#7c469e";
-export const baseFontSize = "1.2rem";
+export const baseFontSize = "1rem";
 export const basePadding = "32px";
 export const baseTitleSize = "1.5rem";
 

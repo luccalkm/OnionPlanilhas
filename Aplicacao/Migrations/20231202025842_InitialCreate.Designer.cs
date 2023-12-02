@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aplicacao.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231129170227_InitialCreate")]
+    [Migration("20231202025842_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -95,6 +95,25 @@ namespace Aplicacao.Migrations
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("ProdutoPedidos");
+                });
+
+            modelBuilder.Entity("Dominio.Regiao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UF")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Regiao");
                 });
 
             modelBuilder.Entity("Dominio.Pedido", b =>
