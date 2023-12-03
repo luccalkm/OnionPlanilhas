@@ -48,7 +48,7 @@ Este projeto visa desenvolver um sistema para melhorar o controle de vendas, man
 - Visual Studio / VSCode
 
 ### Instalação
-Iniciando o processo de instalação da aplicação, temos que efetuar 3 passos:
+Iniciando o processo de instalação da aplicação, temos que efetuar 3 steps:
 
 **1. Clonar o repositório**
 ```bash

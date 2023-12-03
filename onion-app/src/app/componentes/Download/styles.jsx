@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { primaryColor, flexColumnCenterStyles } from "../GlobalStyles";
+import { primaryColor, flexColumnStyles } from "../GlobalStyles";
 
 const Link = styled.a`
   display: flex;
@@ -10,14 +10,10 @@ const Link = styled.a`
   text-align: center;
   transition: 0.3s;
   font-weight: 500;
-
-  /* Estados */
   &:hover {
     background-color: ${primaryColor};
     color: white;
   }
-
-  /* Borda */
   border-color: ${primaryColor};
   border-style: solid;
   border-width: 1px;

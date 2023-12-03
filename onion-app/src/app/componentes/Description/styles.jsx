@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { flexColumnCenterStyles, primaryColor, baseFontSize, basePadding } from "../GlobalStyles";
+import { flexColumnStyles, primaryColor, baseFontSize, basePadding } from "../GlobalStyles";
 
 const Container = styled.article`
-    ${flexColumnCenterStyles};
+    ${flexColumnStyles};
     width: 70%;
     margin: 0 auto;
 `;
@@ -11,39 +11,39 @@ const Holder = styled.div`
     ${Container};
 `;
 
-const Titulo = styled.h1`
+const Title = styled.h1`
     color: ${primaryColor};
 `;
 
-const Subtitulo = styled.h3`
+const SubTitle = styled.h3`
     color: ${primaryColor};
 `;
 
 const Secao = styled.section`
-    ${flexColumnCenterStyles};
+    ${flexColumnStyles};
     padding: calc(${basePadding} * 0.5) 0;
 `;
 
-const baseTexto = styled.p`
+const baseText = styled.p`
     font-size: ${baseFontSize};
     color: ${primaryColor};
     margin-bottom: 16px;
     text-wrap: wrap;
 `;
 
-const Texto = styled(baseTexto)``;
+const Text = styled(baseText)``;
 
-const TextoNegrito = styled(baseTexto)`
+const BoldText = styled(baseText)`
     font-size: calc(${baseFontSize} * 1.08);
     font-weight: bold;
 `;
 
-export const StyledDescricao = {
+export const StyledDescription = {
     Container,
     Holder,
-    Titulo,
-    Subtitulo,
+    Title,
+    SubTitle,
     Secao,
-    Texto,
-    TextoNegrito
+    Text,
+    BoldText
 };

@@ -1,8 +1,8 @@
 import { StyledDownload } from "./styles.jsx";
 import { useEffect, useState } from "react";
 import { agent } from "../../api/agent.js";
-import Loading from "../common/LoadingSpinner/styles.jsx";
-import { useLoadingOnClick } from "../../../features/useLoadingOnClick.jsx";
+import Loading from "../common/Loading.jsx";
+import { useLoadingOnClick } from "../../../features/hooks/useLoadingOnClick.jsx";
 
 export function BotaoDownload() {
   const [downloadUrl, setDownloadUrl] = useState("");

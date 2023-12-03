@@ -1,6 +1,5 @@
-import { Descricao } from "../../componentes/Descricao/index.jsx";
+import { Description } from "../../componentes/Description/index.jsx";
 import { NavBar } from "../../componentes/NavBar/index.jsx";
-import { GlobalStyles } from "../../componentes/GlobalStyles.jsx";
 import { Main } from "./styles.jsx";
 import { useState } from "react";
 import { Upload } from "../../componentes/Upload/index.jsx";
@@ -9,7 +8,7 @@ import { agent } from "../../api/agent.js";
 
 export const Home = () => {
   const [isFileDragged, setIsFileDragged] = useState(false);
-  const { tituloHome } = AppConfig;
+  const { titleHome } = AppConfig;
 
   const uploadFileToAPI = async (file) => {
     setIsFileDragged(true);
@@ -56,10 +55,9 @@ export const Home = () => {
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
     >
-      <GlobalStyles />
-      <NavBar titulo={tituloHome} />
+      <NavBar title={titleHome} />
       <Main.Container>
-        <Descricao />
+        <Description />
         <Upload isFileDragged={isFileDragged} uploadFileToAPI={uploadFileToAPI} />
       </Main.Container>
     </Main.Wrapper>

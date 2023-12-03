@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { flexColumnCenterStyles, primaryColor } from "../GlobalStyles";
+import { flexColumnStyles, primaryColor } from "../GlobalStyles";
 
 export const FileInput = styled.input`
 display: none;
 `;
 
 export const Container = styled.div`
-    ${flexColumnCenterStyles}
+    ${flexColumnStyles}
     border: 2px dashed ${primaryColor};
     border-radius: 5px;
     padding: 20px;
