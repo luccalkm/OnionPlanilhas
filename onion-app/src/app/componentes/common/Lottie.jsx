@@ -13,10 +13,5 @@ export const fadeIn = keyframes`
 export const StyledLottie = styled(({ isLoading, ...rest }) => (
   <Lottie {...rest} />
 ))`
-  animation: ${(props) =>
-    props.isLoading
-      ? css`
-          ${fadeIn} 1s ease forwards
-        `
-      : "none"};
+  animation: ${fadeIn} .5s ease forwards;
 `;

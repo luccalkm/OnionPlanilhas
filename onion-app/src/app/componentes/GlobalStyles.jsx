@@ -4,6 +4,8 @@ export const primaryColor = "#7c469e";
 export const baseFontSize = "1rem";
 export const basePadding = "32px";
 export const baseTitleSize = "1.5rem";
+export const cardBackgroundColor = '#fbfbfb';
+export const baseBackgroundColor = '#f2f2f2'; 
 
 export const flexColumnStyles = css`
   display: flex;
@@ -17,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 400;
 
     color: rgba(255, 255, 255, 0.87);
-    background-color: #f3f3f3;
+    background-color: ${baseBackgroundColor};
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;

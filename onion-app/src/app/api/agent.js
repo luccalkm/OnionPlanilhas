@@ -25,9 +25,7 @@ const Planilhas = {
 };
 
 const Dashboard = {
-  listaVendas: () => requests.get("/Planilha/ObterListaVendas"),
-  vendasPorRegiao: () => requests.get("/Planilha/ObterVendasPorRegiao"),
-  vendasPorProduto: () => requests.get("/Planilha/ObterVendasPorProduto"),
+  obterVendas: () => requests.get("/Planilha/ObterListaVendas"),
 };
 
 export const agent = {

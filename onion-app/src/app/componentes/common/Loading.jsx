@@ -17,11 +17,8 @@ const getProp = (prop, defaultValue) => props => prop in props ? props[prop] : d
 const Loading = styled.div`
   animation: ${rotate360} ${getProp('speed', '1s')} linear infinite;
   transform: translateZ(0);
-
   border: 2px solid ${getProp('color', standardBackground)};
-  border-left-color: ${getProp('accentColor', defaultAccentColor)};
-  border-left-width: 4px;
-  background: transparent;
+  border-left: 2px solid ${getProp('accentColor', defaultAccentColor)};
   width: ${getProp('size', '20px')};
   height: ${getProp('size', '20px')};
   border-radius: 50%;
