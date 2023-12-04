@@ -30,7 +30,6 @@ export const useDashboardData = () => {
           );
 
           setLoading(false);
-          console.log(data);
         }
       } catch (error) {
         toast.error(

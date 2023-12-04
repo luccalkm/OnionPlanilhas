@@ -3,12 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-# App Settings
-appsettings.json
-*appsettings.json
-.\API\appsettings
-
 # SQLite DB
+Onions.db
 *.db
 
 # Node Modules

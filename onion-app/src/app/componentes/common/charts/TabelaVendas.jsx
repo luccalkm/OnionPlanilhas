@@ -20,11 +20,6 @@ export const TabelaVendas = ({ listaVendas }) => {
     );
   }
 
-  const test = (teste) => {
-    console.log(teste);
-    return teste;
-  };
-
   return (
     <StyledTable>
       <StyledTableHead>

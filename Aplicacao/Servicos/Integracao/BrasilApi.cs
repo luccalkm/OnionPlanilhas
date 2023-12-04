@@ -34,9 +34,6 @@ public class BrasilApi
         var content = await response.Content.ReadAsStringAsync();
         var cepInfo = JsonConvert.DeserializeObject<BrasilApiDTO>(content);
 
-        Console.WriteLine(content);
-        Console.WriteLine(cepInfo.state);
-
         if (cepInfo != null)
         {
             var regiao = await _context.Regiao
