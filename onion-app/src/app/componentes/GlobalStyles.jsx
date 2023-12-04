@@ -1,12 +1,13 @@
 import { css, createGlobalStyle } from "styled-components";
 
 export const primaryColor = "#7c469e";
+export const darkerPrimaryColor = "#522f69";
 export const baseFontSize = "1rem";
 export const basePadding = "32px";
 export const baseTitleSize = "1.5rem";
 export const cardBackgroundColor = '#fbfbfb';
 export const baseBackgroundColor = '#f2f2f2'; 
-export const smallScreen = '768px';
+export const mobileScreen = '768px';
 
 export const flexColumnStyles = css`
   display: flex;

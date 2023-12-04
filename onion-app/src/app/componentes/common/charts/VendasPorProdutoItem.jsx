@@ -30,7 +30,6 @@ export const VendasPorItem = ({ vendasPorItem, titulo }) => {
         backgroundColor: [
           "#3d348b",
           "#7678ed",
-          '#e04f58',
           "#f7b801",
           "#f18701",
           "#f35b04",

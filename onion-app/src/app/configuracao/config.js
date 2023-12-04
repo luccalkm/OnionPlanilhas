@@ -1,4 +1,5 @@
 export const AppConfig = {
+  cepInvalidoMessage: "Cep inválido",
   titleHome: "Onion Planilhas",
   telaDescription: {
     title: "Bem-vindo(a)! Vamos facilitar seu trabalho com nossas planilhas.",

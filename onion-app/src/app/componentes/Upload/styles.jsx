@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components";
-import { flexColumnStyles, primaryColor } from "../GlobalStyles";
+import {
+  flexColumnStyles,
+  primaryColor,
+  darkerPrimaryColor,mobileScreen
+} from "../GlobalStyles";
 
 export const FileInput = styled.input`
   display: none;
@@ -13,6 +17,9 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   width: 50%;
+  @media (max-width: ${mobileScreen}) {
+    width: 90%;
+  }
 `;
 
 export const Area = styled.div`
@@ -30,6 +37,10 @@ export const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  &:hover {
+    background-color: ${darkerPrimaryColor};
+  }
 `;
 
 export const Text = styled.p`

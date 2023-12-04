@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexColumnStyles, cardBackgroundColor, smallScreen } from "../../GlobalStyles";
+import { flexColumnStyles, cardBackgroundColor, mobileScreen } from "../../GlobalStyles";
 
 export const Container = styled.div`
   ${flexColumnStyles}
@@ -8,7 +8,7 @@ export const Container = styled.div`
   gap: 25px;
   width: 50%;
 
-  @media (max-width: ${smallScreen}) {
+  @media (max-width: ${mobileScreen}) {
     width: auto;
   }
 `;

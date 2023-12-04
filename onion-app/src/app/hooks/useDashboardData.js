@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { obterDadosVendas } from "../api/servicos/dashboardService";
 import { toast } from "react-toastify";
+import { AppConfig } from "../configuracao/config";
 
 export const useDashboardData = () => {
   const [isLoading, setLoading] = useState(true);
   const [vendasPorProduto, setVendasPorProduto] = useState({});
   const [vendasPorRegiao, setVendasPorRegiao] = useState({});
   const [listaVendas, setListaVendas] = useState([]);
+
+  const { cepInvalidoMessage } = AppConfig;
 
   useEffect(() => {
     let isMounted = true;
@@ -20,26 +23,30 @@ export const useDashboardData = () => {
             data.map((venda) => ({
               Cliente: venda.cliente,
               Produto: venda.produto,
-              "Valor Total":
-                venda.regiao === "Cep Inválido" ? "-" : venda.valorTotal,
-              "Data Entrega":
-                venda.regiao === "Cep Inválido"
-                  ? "CEP inválido"
-                  : venda.dataEntrega,
-              cepInvalido: venda.regiao === "Cep Inválido",
+              "Valor Total": venda.regiao === cepInvalidoMessage ? "-" : venda.valorTotal,
+              "Data Entrega": venda.regiao === cepInvalidoMessage ? "CEP inválido" : venda.dataEntrega,
+              cepInvalido: venda.regiao === cepInvalidoMessage,
             }))
           );
 
           setLoading(false);
-          console.log(listaVendas);
+          console.log(data);
         }
       } catch (error) {
-        toast.error("Ocorreu um erro ao processar os seus dados.");
+        toast.error(
+          "Ocorreu um erro ao processar os seus dados, por favor, tente inserir a planilha novamente."
+        );
         if (isMounted) setLoading(false);
       }
     };
-
-    getData();
+    if (
+      isMounted &&
+      Object.keys(vendasPorProduto).length === 0 &&
+      Object.keys(vendasPorRegiao).length === 0 &&
+      listaVendas.length === 0
+    ) {
+      getData();
+    }
     return () => {
       isMounted = false;
     };

@@ -49,6 +49,7 @@ export function BotaoDownload() {
         onClick={handleDownloadClick}
         href={downloadUrl ? downloadUrl : "#"}
         download="Modelo_Planilha_Onion.xlsx"
+        onMouseLeave={disableLoading}
       >
         {isLoading ? <Loading /> : "Baixar"}
       </StyledDownload.Link>

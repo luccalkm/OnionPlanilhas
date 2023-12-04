@@ -1,10 +1,15 @@
 import styled from "styled-components";
-import { flexColumnStyles, primaryColor, baseFontSize, basePadding } from "../GlobalStyles";
+import { flexColumnStyles, primaryColor, mobileScreen, baseFontSize, basePadding } from "../GlobalStyles";
 
 const Container = styled.article`
     ${flexColumnStyles};
     width: 70%;
     margin: 0 auto;
+
+    @media (max-width: ${mobileScreen}) {
+        width: 100%;
+    
+    }
 `;
 
 const Holder = styled.div`

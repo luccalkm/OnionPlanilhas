@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import {
   cardBackgroundColor,
   baseBackgroundColor,
-  smallScreen,
+  mobileScreen,
   primaryColor,
 } from "../../GlobalStyles";
 
@@ -42,7 +42,7 @@ export const Container = styled.div`
   background-color: ${cardBackgroundColor};
   ${customScrollBar}
 
-  @media (max-width: ${smallScreen}) {
+  @media (max-width: ${mobileScreen}) {
     width: 100%;
   }
 `;
@@ -65,14 +65,14 @@ export const Cell = css`
   border-bottom: ${cellBottomBorder};
   max-width: 57px;
   text-wrap: wrap;
-  word-wrap: break-word;
+  word-wrap: normal;
 
   &:first-child {
     text-wrap: wrap;
     word-wrap: break-word;
   }
 
-  @media (max-width: ${smallScreen}) {
+  @media (max-width: ${mobileScreen}) {
     padding: ${mobileCellPadding};
     font-size: 0.8rem;
   }
@@ -82,7 +82,7 @@ export const StyledTableHeader = styled.th`
   ${Cell}
   padding: 15px 15px;
 
-  @media (max-width: ${smallScreen}) {
+  @media (max-width: ${mobileScreen}) {
     font-size: 0.8rem;
   }
 `;

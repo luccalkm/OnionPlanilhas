@@ -53,7 +53,7 @@ export function Upload({ draggedFile, isFileDragged }) {
     }
   };
 
-  const handleButtonClick = () => fileRef.current.click();
+  const handleButtonClick = () => {enableLoading(); fileRef.current.click();}
 
   return (
     <StyledUpload.Container>
