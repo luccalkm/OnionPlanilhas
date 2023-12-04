@@ -6,6 +6,7 @@ import { FileInput, StyledUpload } from "./styles.jsx";
 import { useNavigate } from "react-router-dom";
 import useLoadingOnClick from "../../hooks/useLoadingOnClick.js";
 import { agent } from "../../api/agent.js";
+import { toast } from 'react-toastify';
 
 export function Upload({ draggedFile, isFileDragged }) {
   const [uploaded, setUploaded] = useState(false);
@@ -16,15 +17,16 @@ export function Upload({ draggedFile, isFileDragged }) {
   const uploadFileToAPI = async (file) => {
     try {
       const response = await agent.Planilhas.importarPlanilha(file);
+      console.log(response)
       return response;
     } catch (error) {
-      console.error("Erro ao fazer upload do arquivo:", error);
+      toast.error("Erro ao fazer upload do arquivo: " + error.message);
     }
   };
 
   const initiateUpload = async (file) => {
     const response = await uploadFileToAPI(file);
-    if (response && response.successo) {
+    if (response && response.sucesso) {
       setUploaded(true);
       setTimeout(() => {
         navigate("/dashboard");

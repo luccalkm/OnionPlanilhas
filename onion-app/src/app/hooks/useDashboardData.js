@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { obterDadosVendas } from "../api/servicos/dashboardService";
+import { toast } from "react-toastify";
 
 export const useDashboardData = () => {
   const [isLoading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ export const useDashboardData = () => {
           console.log(listaVendas);
         }
       } catch (error) {
-        console.error("Erro ao obter dados:", error);
+        toast.error("Ocorreu um erro ao processar os seus dados.");
         if (isMounted) setLoading(false);
       }
     };
