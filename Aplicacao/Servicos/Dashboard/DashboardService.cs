@@ -8,32 +8,32 @@ namespace Aplicacao.Servicos.Dashboard
     public class DashboardService
     {
         private readonly FreteService _freteService;
-        private readonly ViaCepService _viaCepService;
+        private readonly BrasilApi _brasilApiService;
 
-        public DashboardService(FreteService freteService, ViaCepService viaCepService)
+        public DashboardService(FreteService freteService, BrasilApi brasilApiService)
         {
             _freteService = freteService;
-            _viaCepService = viaCepService;
+            _brasilApiService = brasilApiService;
         }
 
-        public async Task<List<VendasRegiaoDTO>> ObterVendasPorRegiao(IEnumerable<PlanilhaDTO> listaPedidos)
-        {
-            var ceps = listaPedidos.Select(p => p.CEP);
-            var regioes = await ObterRegioesCepsAgrupados(ceps);
+        //public async Task<List<VendasRegiaoDTO>> ObterVendasPorRegiao(IEnumerable<PlanilhaDTO> listaPedidos)
+        //{
+        //    var ceps = listaPedidos.Select(p => p.CEP);
+        //    var regioes = await ObterRegioesCepsAgrupados(ceps);
 
-            var agrupamentoRegiao = listaPedidos.GroupBy(p => regioes[p.CEP].Nome)
-                                                .ToDictionary(g => g.Key, g => g.Count());
+        //    var agrupamentoRegiao = listaPedidos.GroupBy(p => regioes[p.CEP].Nome)
+        //                                        .ToDictionary(g => g.Key, g => g.Count());
 
-            return agrupamentoRegiao.Select(r => new VendasRegiaoDTO { Regiao = r.Key, Quantidade = r.Value }).ToList();
-        }
+        //    return agrupamentoRegiao.Select(r => new VendasRegiaoDTO { Regiao = r.Key, Quantidade = r.Value }).ToList();
+        //}
 
-        public List<VendasProdutoDTO> ObterVendasPorProduto(IEnumerable<PlanilhaDTO> listaPedidos)
-        {
-            var agrupamentoProduto = listaPedidos.GroupBy(p => p.Produto)
-                                                 .ToDictionary(g => g.Key, g => g.Count());
+        //public List<VendasProdutoDTO> ObterVendasPorProduto(IEnumerable<PlanilhaDTO> listaPedidos)
+        //{
+        //    var agrupamentoProduto = listaPedidos.GroupBy(p => p.Produto)
+        //                                         .ToDictionary(g => g.Key, g => g.Count());
 
-            return agrupamentoProduto.Select(r => new VendasProdutoDTO { Produto = r.Key, Quantidade = r.Value }).ToList();
-        }
+        //    return agrupamentoProduto.Select(r => new VendasProdutoDTO { Produto = r.Key, Quantidade = r.Value }).ToList();
+        //}
 
         public async Task<List<ListaVendasDTO>> ObterListaVendas(IEnumerable<PlanilhaDTO> listaPedidos)
         {
@@ -63,7 +63,7 @@ namespace Aplicacao.Servicos.Dashboard
             var regioes = new Dictionary<string, RegiaoDTO>();
             foreach (var cep in ceps.Distinct())
             {
-                regioes[cep] = await _viaCepService.ObterRegiaoPorCep(cep);
+                regioes[cep] = await _brasilApiService.ObterRegiaoPorCep(cep);
             }
             return regioes;
         }

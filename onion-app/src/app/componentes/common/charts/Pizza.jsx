@@ -1,13 +1,16 @@
 import styled from "styled-components";
-import { flexColumnStyles, cardBackgroundColor } from "../../GlobalStyles";
+import { flexColumnStyles, cardBackgroundColor, smallScreen } from "../../GlobalStyles";
 
 export const Container = styled.div`
   ${flexColumnStyles}
-  width: 40%;
   justify-content: space-between;
   border-radius: 5px;
   gap: 25px;
-    width: 50%;
+  width: 50%;
+
+  @media (max-width: ${smallScreen}) {
+    width: auto;
+  }
 `;
 
 export const Card = styled.div`

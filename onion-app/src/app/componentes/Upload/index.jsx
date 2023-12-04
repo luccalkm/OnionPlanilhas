@@ -17,27 +17,24 @@ export function Upload({ draggedFile, isFileDragged }) {
   const uploadFileToAPI = async (file) => {
     try {
       const response = await agent.Planilhas.importarPlanilha(file);
-      console.log(response)
-      return response;
+      if (response && response.sucesso) {
+        setUploaded(true);
+        setTimeout(() => {
+          navigate("/dashboard");
+          setUploaded(false);
+        }, 1470);
+      }
     } catch (error) {
-      toast.error("Erro ao fazer upload do arquivo: " + error.message);
-    }
-  };
-
-  const initiateUpload = async (file) => {
-    const response = await uploadFileToAPI(file);
-    if (response && response.sucesso) {
-      setUploaded(true);
-      setTimeout(() => {
-        navigate("/dashboard");
-        setUploaded(false);
-      }, 1470);
+      toast.error("Ocorreu um erro inesperado ao fazer upload do arquivo. Tente novamente mais tarde.");
+    } finally {
+      disableLoading();
     }
   };
 
   useEffect(() => {
     if (draggedFile) {
-      initiateUpload(draggedFile);
+      enableLoading();
+      uploadFileToAPI(draggedFile);
     }
   }, [draggedFile]);
 
@@ -47,12 +44,12 @@ export function Upload({ draggedFile, isFileDragged }) {
     } else if (!isFileDragged && isLoading) {
       disableLoading();
     }
-  }, [isFileDragged, enableLoading, disableLoading]);
+  }, [isFileDragged, isLoading, enableLoading, disableLoading]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      initiateUpload(file);
+      uploadFileToAPI(file);
     }
   };
 

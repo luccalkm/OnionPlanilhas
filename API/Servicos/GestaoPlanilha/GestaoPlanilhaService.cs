@@ -57,7 +57,7 @@ public class GestaoPlanilhaService : IGestaoPlanilhaService
         // Checar se arquivo existe e possui conteúdo (garantir)
         if (listaPedidos is null || !listaPedidos.Any())
         {
-            return new ResultadoProcessamento { Successo = false, Mensagem = "A planilha não possui dados." };
+            return new ResultadoProcessamento { Sucesso = false, Mensagem = "A planilha não possui dados." };
         }
 
         foreach (var pedido in listaPedidos)
@@ -66,7 +66,7 @@ public class GestaoPlanilhaService : IGestaoPlanilhaService
             await processamento.CadastrarProdutoPedido(pedido);
         }
 
-        return new ResultadoProcessamento { Successo = true, Mensagem = "Planilha processada com sucesso." };
+        return new ResultadoProcessamento { Sucesso = true, Mensagem = "Planilha processada com sucesso." };
     }
 
     private string RemoverCaracteresEspeciais(string texto)

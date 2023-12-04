@@ -32,52 +32,70 @@ Este projeto visa desenvolver um sistema para melhorar o controle de vendas, man
 
 ### Front-End
 
-#### Bibliotecas Utilizadas
+#### Bibliotecas Utilizadas (6)
+
 - **Styled Components**
-  - CSS-in-JS para estilização dinâmica de componentes.
-  - Escolhido para agilidade e qualidade em projetos de menor escala.
- 
-- **Gráficos**
-  - ... 
+  - CSS-in-JS para agilidade e estilização dinâmica de componentes.
+
+- **Chart.js & React-Chartjs-2**
+  - Utilizados para criar gráficos interativos e responsivos.
+
+- **Lottie**
+  - Usados para renderizar animações mais leves e com alta qualidade exportadas do Adobe After Effect.
+
+
+- **React Router Dom**
+  - Permite uma navegação fluida e dinâmica entre as diferentes telas.
+
+- **React Toastify**
+  - Biblioteca para criar alertas (positivas ou negativas) responsivas e configuráveis.
+
+- **Axios**
+  - Cliente HTTP baseado em promessas para fazer requisições HTTP.
 
 ## Começando
 
 ### Pré-requisitos
-- Node
-- .NET
-- Visual Studio / VSCode
+- [Node](https://nodejs.org/en/download/current)
+- [.NET 7](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+- [Visual Studio / VSCode (opcional)](https://code.visualstudio.com/)
 
 ### Instalação
-Iniciando o processo de instalação da aplicação, temos que efetuar 3 steps:
+Iniciando o processo de instalação da aplicação, temos que efetuar 3 passos:
 
 **1. Clonar o repositório**
 ```bash
 # Exemplo de comando para clonar o repositório
-git clone [URL do Repositório]
+git clone https://github.com/luccalkm/onion-sa.git
 cd onion-sa
 ```
 
 **2. Restaurar as configurações do Back-End**
 ```bash
 dotnet restore
-# Para testar, inicie o projeto
 cd API
-dotnet watch
 ```
 Caso queira visualizar a documentação da API, é possível através do Swagger.
 
 **3. Restaurar as configurações do Front-End**
 ```bash
-cd onion-app
+# Se estiver na raiz
+cd onion-app 
+# Se estiver no diretório .\API
+cd ../onion-app
 npm install
 ```
 
 ### Executando o Projeto
 Após clonar o repositório, basta executar os seguintes comandos:
-```bash
-# Exemplo de comandos para iniciar o projeto
-cd onion-sa
-npm start # Para Front-End
-dotnet run # Para Back-End
-```
 
+#### Backend
+```bash
+# Saindo da raiz, temos:
+dotnet watch --project .\API\
+```
+#### Front-End
+```bash
+# Saindo da raiz, temos:
+npm run dev
+```

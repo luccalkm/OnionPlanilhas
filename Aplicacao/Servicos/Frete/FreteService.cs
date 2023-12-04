@@ -38,7 +38,7 @@ public class FreteService
             case "São Paulo":
                 return preco *= 1.05m;
             default:
-                throw new Exception("Região não existe");
+                return preco;
         }
     }
 

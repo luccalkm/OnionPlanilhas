@@ -2,6 +2,6 @@
 
 public class ResultadoProcessamento
 {
-    required public bool Successo { get; set; }
+    required public bool Sucesso { get; set; }
     required public string Mensagem { get; set; }
 }

@@ -3,7 +3,6 @@ import { BotaoDownload } from "../Download/index.jsx";
 import { AppConfig } from "../../configuracao/config";
 
 export function Description() {
-  // Recuperar textos e títulos da tela de descrição do arquivo de configuração
   const { title, subTitle, instrucoes } = AppConfig.telaDescription;
   const { steps } = instrucoes;
 

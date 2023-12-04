@@ -37,7 +37,7 @@ builder.Services.AddCors(options =>
 // Servi�os personalizados
 builder.Services.AddScoped<IGestaoPlanilhaService, GestaoPlanilhaService>();
 builder.Services.AddScoped<ProcessarDados>(); 
-builder.Services.AddScoped<ViaCepService>();
+builder.Services.AddScoped<BrasilApi>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<FreteService>();
 builder.Services.AddScoped<IProcessamentoService, ProcessamentoService>();

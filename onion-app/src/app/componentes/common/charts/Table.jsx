@@ -1,9 +1,16 @@
 import styled, { css } from "styled-components";
-import { cardBackgroundColor, baseBackgroundColor } from "../../GlobalStyles";
+import {
+  cardBackgroundColor,
+  baseBackgroundColor,
+  smallScreen,
+  primaryColor,
+} from "../../GlobalStyles";
 
 const cellPadding = "6px 15px";
+const mobileCellPadding = "6px 9px";
 const cellBottomBorder = "1px solid #ddd";
 const cellAlign = "left";
+const invalidCep = "#c6c6c6";
 
 const customScrollBar = css`
   &::-webkit-scrollbar {
@@ -30,10 +37,14 @@ export const Container = styled.div`
   box-shadow: 0px 0px 5px rgba(125, 125, 125, 0.5);
   border-radius: 5px;
   display: flex;
-  overflow-y: ${props => props.overflow ? 'hidden' : 'scroll'};
+  overflow-y: ${(props) => (props.overflow ? "hidden" : "scroll")};
   overflow-x: hidden;
   background-color: ${cardBackgroundColor};
   ${customScrollBar}
+
+  @media (max-width: ${smallScreen}) {
+    width: 100%;
+  }
 `;
 
 export const StyledTable = styled.table`
@@ -52,17 +63,35 @@ export const Cell = css`
   padding: ${cellPadding};
   text-align: ${cellAlign};
   border-bottom: ${cellBottomBorder};
+  max-width: 57px;
+  text-wrap: wrap;
+  word-wrap: break-word;
+
+  &:first-child {
+    text-wrap: wrap;
+    word-wrap: break-word;
+  }
+
+  @media (max-width: ${smallScreen}) {
+    padding: ${mobileCellPadding};
+    font-size: 0.8rem;
+  }
 `;
 
 export const StyledTableHeader = styled.th`
   ${Cell}
   padding: 15px 15px;
+
+  @media (max-width: ${smallScreen}) {
+    font-size: 0.8rem;
+  }
 `;
 
 export const StyledTableRow = styled.tr`
   &:nth-child(even) {
     background-color: ${baseBackgroundColor};
   }
+  color: ${(props) => (props.isInvalidCep ? "red" : "inherit")};
 `;
 
 export const StyledTableCell = styled.td`

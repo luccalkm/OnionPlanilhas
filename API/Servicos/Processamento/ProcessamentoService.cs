@@ -40,7 +40,7 @@ public class ProcessamentoService : IProcessamentoService
 
         // Salvar em cache para usar em outro local e otimizar geração de gráficos
         var cacheKey = "ultimaListaPedidos";
-        _cache.Set(cacheKey, listaPedidos, TimeSpan.FromMinutes(10));
+        _cache.Set(cacheKey, listaPedidos, TimeSpan.FromMinutes(120));
 
         var resultado = await _planilhaService.ProcessarPlanilha(listaPedidos, _processamento);
 

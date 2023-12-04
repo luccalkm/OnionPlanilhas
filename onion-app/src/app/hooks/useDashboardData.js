@@ -14,16 +14,22 @@ export const useDashboardData = () => {
       try {
         const data = await obterDadosVendas();
         if (isMounted) {
-          setVendasPorProduto(processarDadosPorChave(data, "Produto"));
-          setVendasPorRegiao(processarDadosPorChave(data, "Regiao"));
+          setVendasPorProduto(processarDadosPorChave(data, "produto"));
+          setVendasPorRegiao(processarDadosPorChave(data, "regiao"));
           setListaVendas(
             data.map((venda) => ({
-              "Cliente": venda.Cliente,
-              "Produto": venda.Produto,
-              "Valor Total": venda.ValorTotal,
-              "Data Entrega": venda.DataEntrega,
+              Cliente: venda.cliente,
+              Produto: venda.produto,
+              "Valor Total":
+                venda.regiao === "Cep Inválido" ? "-" : venda.valorTotal,
+              "Data Entrega":
+                venda.regiao === "Cep Inválido"
+                  ? "CEP inválido"
+                  : venda.dataEntrega,
+              cepInvalido: venda.regiao === "Cep Inválido",
             }))
           );
+
           setLoading(false);
           console.log(listaVendas);
         }
