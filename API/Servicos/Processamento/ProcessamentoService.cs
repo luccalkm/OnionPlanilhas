@@ -11,7 +11,7 @@ namespace API.Servicos.Processamento;
 public class ProcessamentoService : IProcessamentoService
 {
     private readonly IMemoryCache _cache;
-    private readonly IGestaoPlanilhaService _planilhaService;
+    private readonly IGestaoPlanilhaService _gestaoPlanilhaService;
     private readonly ProcessarDados _processamento;
     private readonly DashboardService _dashboardService;
 
@@ -22,7 +22,7 @@ public class ProcessamentoService : IProcessamentoService
         DashboardService dashboardService)
     {
         _cache = cache;
-        _planilhaService = planilhaService;
+        _gestaoPlanilhaService = planilhaService;
         _processamento = processamento;
         _dashboardService = dashboardService;
     }
@@ -36,13 +36,13 @@ public class ProcessamentoService : IProcessamentoService
         }
 
         // Retornar lista de dados na planilha
-        var listaPedidos = await _planilhaService.LerPedidos(planilha);
+        var listaPedidos = await _gestaoPlanilhaService.LerPedidos(planilha);
 
         // Salvar em cache para usar em outro local e otimizar geração de gráficos
         var cacheKey = "ultimaListaPedidos";
         _cache.Set(cacheKey, listaPedidos, TimeSpan.FromMinutes(120));
 
-        var resultado = await _planilhaService.ProcessarPlanilha(listaPedidos, _processamento);
+        var resultado = await _gestaoPlanilhaService.ProcessarPlanilha(listaPedidos, _processamento);
 
         return resultado;
     }

@@ -100,7 +100,7 @@ public class GestaoPlanilhaService : IGestaoPlanilhaService
         {
             return cepFormatado;
         }
-        throw new Exception($"O CEP informado está incorreto e possui apenas {cep.Length} digitos. CEP: {cep}");
+        throw new Exception($"O CEP informado está incorreto. CEP: {cep}");
     }
     
     private DateOnly ConverterDateTimeEmDateOnly(string stringData)
