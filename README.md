@@ -100,3 +100,8 @@ dotnet watch --project .\API\
 ```bash
 npm run dev
 ```
+
+## Possíveis otimizações atuais
+- Estrutura banco de dados p/ separar arquivos por upload (possibilitar filtro front-end)
+- Quais itens são guardados em cache
+- Banco de CEPs local ao invés de API externa
